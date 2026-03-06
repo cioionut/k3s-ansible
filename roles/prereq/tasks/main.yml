@@ -48,7 +48,6 @@
         force: true
       when:
         - "'iptables' in ansible_facts.packages"
-        - "'iptables-nft' not in ansible_facts.packages"
 
     - name: Install iptables-nft and nftables
       community.general.pacman:
