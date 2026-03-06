@@ -56,17 +56,33 @@
           - iptables-nft
           - nftables
         state: present
-
-    - name: TEMP - Ensure nftables is enabled and started
+    
+    - name: TEMPORARY FOR TESTING - Ensure nftables is enabled and started
       ansible.builtin.systemd:
         name: nftables
         state: started
         enabled: true
 
-    - name: Configure nftables rules for K3s
+    - name: Check nftables service
+      ansible.builtin.service_facts:
+
+    - name: Ensure nftables include directory exists
+      ansible.builtin.file:
+        path: /etc/nftables.d
+        state: directory
+        mode: "0755"
+
+    - name: Ensure nftables loads /etc/nftables.d rules
+      ansible.builtin.lineinfile:
+        path: /etc/nftables.conf
+        regexp: '^include "/etc/nftables\\.d/\\*\\.nft"$'
+        line: 'include "/etc/nftables.d/*.nft"'
+        insertafter: EOF
+
+    - name: Install K3s nftables rules fragment
       ansible.builtin.template:
-        src: nftables.conf.j2
-        dest: /etc/nftables.conf
+        src: k3s.nft.j2
+        dest: /etc/nftables.d/k3s.nft
         mode: "0644"
       notify: Reload nftables
       when:
