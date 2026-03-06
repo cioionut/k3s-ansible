@@ -57,6 +57,12 @@
           - nftables
         state: present
 
+    - name: TEMP - Ensure nftables is enabled and started
+      ansible.builtin.systemd:
+        name: nftables
+        state: started
+        enabled: true
+
     - name: Configure nftables rules for K3s
       ansible.builtin.template:
         src: nftables.conf.j2
