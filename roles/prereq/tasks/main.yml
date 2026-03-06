@@ -87,7 +87,7 @@
       notify: Reload nftables
       when:
         - ansible_facts.services['nftables.service'] is defined
-        - ansible_facts.services['nftables.service'].state == 'running'
+        - ansible_facts.services['nftables.service'].state == 'enabled'
 
 - name: Populate service facts
   ansible.builtin.service_facts:
