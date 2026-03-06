@@ -32,7 +32,7 @@
     reload: true
   when: ansible_facts['all_ipv6_addresses'] | length > 0
 
-- name: Handle modern nftables/iptables-nft stack (Arch Linux ARM 6.18+)
+- name: Handle modern nftables/iptables-nft stack (Arch Linux 6.18+)
   when:
     - ansible_facts['distribution'] == 'Archlinux'
     - ansible_facts['kernel'] is version('6.18', '>=')
@@ -69,7 +69,7 @@
     - name: Configure nftables include and K3s rules fragment
       when:
         - ansible_facts.services['nftables.service'] is defined
-        - ansible_facts.services['nftables.service'].state == 'enabled'
+        - ansible_facts.services['nftables.service'].status == 'enabled'
       block:
         - name: Ensure nftables include directory exists
           ansible.builtin.file:
