@@ -1,5 +1,6 @@
 #!/usr/bin/nft -f
 flush ruleset
+include "/etc/nftables.d/*.nft"
 
 table inet filter {
   chain input {
