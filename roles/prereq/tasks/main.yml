@@ -57,18 +57,15 @@
           - nftables
         state: present
 
-    # - name: Ensure nftables is enabled and started
-    #   ansible.builtin.systemd:
-    #     name: nftables
-    #     state: started
-    #     enabled: true
-
-    # - name: Configure nftables rules for K3s
-    #   ansible.builtin.template:
-    #     src: nftables.conf.j2
-    #     dest: /etc/nftables.conf
-    #     mode: "0644"
-    #   notify: Reload nftables
+    - name: Configure nftables rules for K3s
+      ansible.builtin.template:
+        src: nftables.conf.j2
+        dest: /etc/nftables.conf
+        mode: "0644"
+      notify: Reload nftables
+      when:
+        - ansible_facts.services['nftables.service'] is defined
+        - ansible_facts.services['nftables.service'].state == 'running'
 
 - name: Populate service facts
   ansible.builtin.service_facts:
